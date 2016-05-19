@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout representing one single blog post within the ListView of the Master Fragment,
+     Consists of a RelativeLayout with an ImageView for the thumbnail and TextViews for the caption and creation times-->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:rowCount="3"
+    android:columnCount="2"
+    android:orientation="vertical">
+
+    <ImageView android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:gravity="right"
+        android:id="@+id/thumbnail"
+        android:text="image"
+        android:height="20sp"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:textAlignment="textStart"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/createdOn"
+        android:layout_margin="4dp" />
+
+    <TextView android:textColor="#000000"
+        android:id="@+id/caption"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:height="20sp"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:singleLine="false"
+        android:layout_rowSpan="2"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_toEndOf="@+id/thumbnail"
+        android:maxLines="4"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:layout_width="130dp"
+        android:layout_height="15dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Created 2016-05-15 08:12:42"
+        android:id="@+id/createdOn"
+        android:layout_below="@+id/caption"
+        android:layout_alignLeft="@+id/caption"
+        android:layout_alignStart="@+id/caption"
+        android:textStyle="italic"
+        android:textSize="@dimen/abc_dialog_list_padding_vertical_material" />
+
+    <TextView
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Updated 2016-05-15 08:12:42"
+        android:id="@+id/updatedOn"
+        android:layout_below="@+id/caption"
+        android:layout_toRightOf="@+id/createdOn"
+        android:layout_toEndOf="@+id/createdOn"
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="0dp"
+        android:textSize="@dimen/abc_dialog_list_padding_vertical_material"
+        android:textStyle="italic" />
+
+    <TextView
+        android:textColor="#000000"
+        android:id="@+id/id"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:layout_weight="1"
+        android:typeface="monospace"
+        android:height="40sp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_toEndOf="@+id/updatedOn"
+        android:layout_alignBottom="@+id/createdOn" />
+
+</RelativeLayout>

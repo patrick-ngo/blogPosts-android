@@ -18,6 +18,14 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
+import ngo.patrick.netccentricassignment.http.BlogPostAPI;
+import ngo.patrick.netccentricassignment.model.BlogPost;
+import ngo.patrick.netccentricassignment.model.BlogPostList;
+import retrofit2.Call;
+import retrofit2.Response;
+
 /**
  * Detail Fragment: Encapsulates fetching the details of a single blog post and displaying it on the layout.
  */
@@ -36,14 +44,17 @@ public class DetailFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         //Get initial data to display blog post details
+        BlogPostAPI blogPostService = BlogPostAPI.retrofit.create(BlogPostAPI.class);
+        final Call<BlogPost> call = blogPostService.getSingleBlogPost(getActivity().getIntent().getStringExtra(BlogPostModel.INTENT_ID));
+
         FetchBlogDetailTask blogPostTask = new FetchBlogDetailTask(getActivity(), rootView);
-        blogPostTask.execute(getActivity().getIntent().getStringExtra(BlogPostModel.INTENT_ID));
+        blogPostTask.execute(call);
 
         return rootView;
     }
 
 
-    public class FetchBlogDetailTask extends AsyncTask<String, Void, BlogPostModel> {
+    public class FetchBlogDetailTask extends AsyncTask<Call, Void, BlogPost> {
         private Context mContext;
         private View mRootView;
         private final String LOG_TAG = FetchBlogDetailTask.class.getSimpleName();
@@ -54,44 +65,23 @@ public class DetailFragment extends Fragment
         }
 
         /**
-         * Take the String representing a single blogpost in JSON Format and
-         * pull out the data we need to construct the BlogPostModel
-         */
-        private BlogPostModel getBlogPostDataFromJson(String blogpostsJsonStr)
-                throws JSONException
-        {
-                JSONObject blogPostJson = new JSONObject(blogpostsJsonStr);
-                BlogPostModel b = new BlogPostModel(blogPostJson);
-
-                return b;
-        }
-
-        /**
          * Retrieve single blogpost data by Http Request
          * Retrieval done on separate thread to avoid cluttering main UI thread
          */
         @Override
-        protected BlogPostModel doInBackground(String... params)
+        protected BlogPost doInBackground(Call ... params)
         {
-            //blog post id must be provided
-            if (params.length == 0)
-            {
-                return null;
-            }
-
-            //Call the http GET from method from provided API
-            String forecastJsonStr = BlogPostHttpRequest.GetData(params[0]);
-
             try
             {
-                return getBlogPostDataFromJson(forecastJsonStr);
+                Call<BlogPost> call = params[0];
+                Response<BlogPost> response = call.execute();
+
+                return response.body();
             }
-            catch (JSONException e)
+            catch (IOException e)
             {
-                Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
-
             return null;
         }
 
@@ -100,7 +90,7 @@ public class DetailFragment extends Fragment
          * Display to view
          */
         @Override
-        protected void onPostExecute(BlogPostModel result)
+        protected void onPostExecute(BlogPost result)
         {
             // The detail Activity called via intent.  Inspect the intent for forecast data.
             Intent intent = getActivity().getIntent();
@@ -111,19 +101,19 @@ public class DetailFragment extends Fragment
 
                 //display image of the blog post
                 ImageView thumbnailImageView = ((ImageView) mRootView.findViewById(R.id.thumbnail));
-                Picasso.with(getContext()).load(result.image).into(thumbnailImageView);
+                Picasso.with(getContext()).load(result.getImage()).into(thumbnailImageView);
 
                 //display caption of the blog post
                 TextView captionTextView =  ((TextView) mRootView.findViewById(R.id.caption));
-                captionTextView.setText(result.caption);
+                captionTextView.setText(result.getCaption());
 
                 //display creation date of the blog post
                 TextView createdOnTextView =  ((TextView) mRootView.findViewById(R.id.createdOn));
-                createdOnTextView.setText(getContext().getResources().getString(R.string.created_on) + " " + result.createdAt);
+                createdOnTextView.setText(getContext().getResources().getString(R.string.created_on) + " " + result.getCreatedAt());
 
                 //display update date of the blog post
                 TextView updatedOnTextView = ((TextView) mRootView.findViewById(R.id.updatedOn));
-                updatedOnTextView.setText(getContext().getResources().getString(R.string.updated_on) + " " + result.updatedAt);
+                updatedOnTextView.setText(getContext().getResources().getString(R.string.updated_on) + " " + result.getUpdatedAt());
             }
         }
 

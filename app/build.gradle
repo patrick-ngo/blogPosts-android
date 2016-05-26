@@ -21,6 +21,12 @@ android {
     packagingOptions {
         exclude "META-INF/maven/com.squareup.picasso/picasso/pom.properties"
         exclude "META-INF/maven/com.squareup.picasso/picasso/pom.xml"
+        exclude "META-INF/maven/com.squareup.retrofit2/retrofit/pom.xml"
+        exclude "META-INF/maven/com.squareup.retrofit2/retrofit/pom.properties"
+        exclude "META-INF/maven/com.squareup.retrofit2/converter-gson/pom.xml"
+        exclude "META-INF/maven/com.squareup.retrofit2/converter-gson/pom.properties"
+        exclude "META-INF/maven/com.google.code.gson/gson/pom.xml"
+        exclude "META-INF/maven/com.google.code.gson/gson/pom.properties"
     }
 }
 
@@ -32,4 +38,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.squareup.picasso:picasso:2.5.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.google.code.gson:gson:2.6.2'
+
 }

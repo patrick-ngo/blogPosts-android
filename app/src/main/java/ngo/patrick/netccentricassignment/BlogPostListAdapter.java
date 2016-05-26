@@ -13,10 +13,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import ngo.patrick.netccentricassignment.model.Result;
+
 /**
  * BlogListAdapter: Custom ListAdapter to bind data Data from the BlogPostModel data to each item in the ListView
  */
-public class BlogPostListAdapter extends ArrayAdapter<BlogPostModel>
+public class BlogPostListAdapter extends ArrayAdapter<Result>
 {
 
     public BlogPostListAdapter(Context context, int textViewResourceId)
@@ -24,7 +26,7 @@ public class BlogPostListAdapter extends ArrayAdapter<BlogPostModel>
         super(context, textViewResourceId);
     }
 
-    public BlogPostListAdapter(Context context, int resource, List<BlogPostModel> items)
+    public BlogPostListAdapter(Context context, int resource, List<Result> items)
     {
         super(context, resource, items);
     }
@@ -41,7 +43,7 @@ public class BlogPostListAdapter extends ArrayAdapter<BlogPostModel>
         }
 
         //Get blogpost data from specified position
-        BlogPostModel p = getItem(position);
+        Result p = getItem(position);
 
         //Find appropriate layout components and display respective data
         if (p != null)
@@ -52,28 +54,29 @@ public class BlogPostListAdapter extends ArrayAdapter<BlogPostModel>
             TextView createdOnTextView = (TextView) v.findViewById(R.id.createdOn);
             TextView updatedOnTextView = (TextView) v.findViewById(R.id.updatedOn);
 
-            if (idTextView != null) {
-                idTextView.setText(p.id);
+            if (idTextView != null)
+            {
+                idTextView.setText(Integer.toString(p.getId()));
+
             }
 
             if (captionTextView != null) {
-                captionTextView.setText(p.caption);
+                captionTextView.setText(p.getCaption());
             }
 
             if (thumbnailView != null) {
-                Picasso.with(getContext()).load(p.thumbnail).into(thumbnailView);
+                Picasso.with(getContext()).load(p.getThumbnail()).into(thumbnailView);
             }
 
             if (createdOnTextView != null) {
-                createdOnTextView.setText(getContext().getResources().getString(R.string.created_on) + p.createdAt);
+                createdOnTextView.setText(getContext().getResources().getString(R.string.created_on) + p.getCreatedAt());
             }
 
             if (updatedOnTextView != null) {
-                updatedOnTextView.setText(getContext().getResources().getString(R.string.updated_on) + p.updatedAt);
+                updatedOnTextView.setText(getContext().getResources().getString(R.string.updated_on) + p.getUpdatedAt());
             }
         }
 
         return v;
     }
-
 }

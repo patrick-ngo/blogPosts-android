@@ -28,10 +28,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+
+import ngo.patrick.netccentricassignment.http.BlogPostAPI;
+import ngo.patrick.netccentricassignment.model.BlogPostList;
+import ngo.patrick.netccentricassignment.model.Result;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Master Fragment: Encapsulates fetching all the BlogPosts and displaying it as a ListView layout.
@@ -68,19 +78,20 @@ public class MasterFragment extends Fragment
         int id = item.getItemId();
         if (id == R.id.action_refresh)
         {
+            BlogPostAPI blogPostService = BlogPostAPI.retrofit.create(BlogPostAPI.class);
+            final Call<BlogPostList> call = blogPostService.getAllBlogPosts();
             FetchAllBlogPostsTask blogPostsTask = new FetchAllBlogPostsTask();
-            blogPostsTask.execute();
+            blogPostsTask.execute(call);
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_master, container, false);
 
         //Create a BlogPostListAdapter and bind it to the listview in the layout
@@ -89,76 +100,49 @@ public class MasterFragment extends Fragment
         listView.setAdapter(blogPostsListAdapter);
 
         //Create the click listener for the listview items (clicking on a blogpost leads to the Detail page of that blog post)
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-            {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 //Fire an Intent to launch the Detail Activity, with the blogpost id as a parameter
-                BlogPostModel selectedBlogPost = blogPostsListAdapter.getItem(position);
+                Result selectedBlogPost = blogPostsListAdapter.getItem(position);
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(BlogPostModel.INTENT_ID, selectedBlogPost.id);
+                detailIntent.putExtra(BlogPostModel.INTENT_ID, Integer.toString(selectedBlogPost.getId()));
                 startActivity(detailIntent);
             }
         });
 
         //Get initial data to display blog posts
-        FetchAllBlogPostsTask blogPostsTask = new FetchAllBlogPostsTask();
-        blogPostsTask.execute();
+        BlogPostAPI blogPostService = BlogPostAPI.retrofit.create(BlogPostAPI.class);
+        final Call<BlogPostList> call = blogPostService.getAllBlogPosts();
+
+        new FetchAllBlogPostsTask().execute(call);
 
         return rootView;
     }
 
 
-    public class FetchAllBlogPostsTask extends AsyncTask<String, Void, BlogPostModel[]> {
+    private class FetchAllBlogPostsTask extends AsyncTask<Call, Void, BlogPostList>
+    {
 
         private final String LOG_TAG = FetchAllBlogPostsTask.class.getSimpleName();
-
-
-        /**
-         * Take the String representing the list of all blogposts in JSON Format and
-         * pull out the data we need to construct the list of BlogPostModel
-         */
-        private BlogPostModel[] getBlogPostsDataFromJson(String blogpostsJsonStr)
-                throws JSONException {
-
-            JSONObject allBlogPostsJson = new JSONObject(blogpostsJsonStr);
-            JSONArray blogPostArray = allBlogPostsJson.getJSONArray(BlogPostModel.JSON_RESULTS);
-
-            int numBlogPosts = blogPostArray.length();
-
-            BlogPostModel[] blogposts = new BlogPostModel[numBlogPosts];
-
-            for(int i = 0; i < blogPostArray.length(); i++)
-            {
-                JSONObject singleBlogPost = blogPostArray.getJSONObject(i);
-                BlogPostModel b = new BlogPostModel(singleBlogPost);
-                blogposts[i] = b;
-            }
-
-            return blogposts;
-        }
-
         /**
          * Retrieve all blogpost data by Http Request
          * Retrieval done on separate thread to avoid cluttering main UI thread
          */
         @Override
-        protected BlogPostModel[] doInBackground(String... params)
+        protected BlogPostList doInBackground(Call... params)
         {
-            //Call the http GET from method from provided API
-            String allBlogPostsJsonStr = BlogPostHttpRequest.GetData("");
-
             try
             {
-                return getBlogPostsDataFromJson(allBlogPostsJsonStr);
+                Call<BlogPostList> call = params[0];
+                Response<BlogPostList> response = call.execute();
+
+                return response.body();
             }
-            catch (JSONException e)
+            catch (IOException e)
             {
-                Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
-
             return null;
         }
 
@@ -167,12 +151,12 @@ public class MasterFragment extends Fragment
          * Add to List Adapter for display on the view
          */
         @Override
-        protected void onPostExecute(BlogPostModel[] result)
+        protected void onPostExecute(BlogPostList results)
         {
-            if (result != null)
+            if (results != null)
             {
                 blogPostsListAdapter.clear();
-                for(BlogPostModel singleBlogPost : result)
+                for (Result singleBlogPost : results.getResults())
                 {
                     blogPostsListAdapter.add(singleBlogPost);
                 }
@@ -181,3 +165,5 @@ public class MasterFragment extends Fragment
 
     }
 }
+
+

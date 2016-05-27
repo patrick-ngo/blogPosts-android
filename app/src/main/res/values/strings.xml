@@ -5,6 +5,7 @@
     <string name="action_refresh">Refresh</string>  <!-- Menu label to fetch updated data info from the server -->
     <string name="title_activity_main">Netccentric Assignment</string>
     <string name="title_activity_detail">Detail Page</string>
+    <string name="title_activity_new_post">New Post Page</string>
     <string name="created_on">Created:  </string>
     <string name="updated_on">Updated:  </string>
 </resources>

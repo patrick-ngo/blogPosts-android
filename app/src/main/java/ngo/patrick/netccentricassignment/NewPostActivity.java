@@ -23,20 +23,20 @@ import android.view.MenuItem;
 
 
 /**
- * Detail Activity: creates the Detail Fragment
+ * New Post Activity: creates the New Post Fragment
  */
-public class DetailActivity extends AppCompatActivity
+public class NewPostActivity extends AppCompatActivity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_new_post);
 
         if (savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new DetailFragment())
+                    .add(R.id.container, new NewPostFragment())
                     .commit();
         }
     }
@@ -64,12 +64,6 @@ public class DetailActivity extends AppCompatActivity
 
 
 }
-
-
-
-
-
-
 
 
 

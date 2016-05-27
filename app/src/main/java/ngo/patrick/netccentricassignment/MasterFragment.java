@@ -27,20 +27,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.List;
 
 import ngo.patrick.netccentricassignment.http.BlogPostAPI;
 import ngo.patrick.netccentricassignment.model.BlogPostList;
 import ngo.patrick.netccentricassignment.model.Result;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -117,6 +116,21 @@ public class MasterFragment extends Fragment
 
         new FetchAllBlogPostsTask().execute(call);
 
+
+
+       Button newPostButton = (Button)rootView.findViewById(R.id.btn_new_post);
+
+        newPostButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //Fire an Intent to launch the New Post Activity
+                Intent newPostIntent = new Intent(getActivity(), NewPostActivity.class);
+                startActivity(newPostIntent);
+            }
+        });
+
         return rootView;
     }
 
@@ -136,6 +150,7 @@ public class MasterFragment extends Fragment
             {
                 Call<BlogPostList> call = params[0];
                 Response<BlogPostList> response = call.execute();
+
 
                 return response.body();
             }

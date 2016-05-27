@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ngo.patrick.netccentricassignment">
 
-
-    <!--Allow app to access the internet -->
+    <!-- Allow app to access the internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,10 +24,15 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ngo.patrick.netccentricassignment.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NewPostActivity"
+            android:label="@string/title_activity_new_post"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

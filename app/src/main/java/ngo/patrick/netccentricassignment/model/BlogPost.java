@@ -7,6 +7,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class BlogPost {
 
+    //Used to pass ID of blog post through Intent parameter
+    public static String INTENT_ID = "blogpost_id";
+
     @SerializedName("id")
     @Expose
     private int id;

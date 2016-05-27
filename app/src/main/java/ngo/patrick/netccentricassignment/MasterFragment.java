@@ -36,6 +36,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 
 import ngo.patrick.netccentricassignment.http.BlogPostAPI;
+import ngo.patrick.netccentricassignment.model.BlogPost;
 import ngo.patrick.netccentricassignment.model.BlogPostList;
 import ngo.patrick.netccentricassignment.model.Result;
 import retrofit2.Call;
@@ -105,21 +106,14 @@ public class MasterFragment extends Fragment
                 //Fire an Intent to launch the Detail Activity, with the blogpost id as a parameter
                 Result selectedBlogPost = blogPostsListAdapter.getItem(position);
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(BlogPostModel.INTENT_ID, Integer.toString(selectedBlogPost.getId()));
+                detailIntent.putExtra(BlogPost.INTENT_ID, Integer.toString(selectedBlogPost.getId()));
                 startActivity(detailIntent);
             }
         });
 
-        //Get initial data to display blog posts
-        BlogPostAPI blogPostService = BlogPostAPI.retrofit.create(BlogPostAPI.class);
-        final Call<BlogPostList> call = blogPostService.getAllBlogPosts();
 
-        new FetchAllBlogPostsTask().execute(call);
-
-
-
-       Button newPostButton = (Button)rootView.findViewById(R.id.btn_new_post);
-
+        //create the  click listener for the New Post Button
+        Button newPostButton = (Button)rootView.findViewById(R.id.btn_new_post);
         newPostButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -130,6 +124,13 @@ public class MasterFragment extends Fragment
                 startActivity(newPostIntent);
             }
         });
+
+        //Get initial data to display blog posts
+        BlogPostAPI blogPostService = BlogPostAPI.retrofit.create(BlogPostAPI.class);
+        final Call<BlogPostList> call = blogPostService.getAllBlogPosts();
+
+        new FetchAllBlogPostsTask().execute(call);
+
 
         return rootView;
     }

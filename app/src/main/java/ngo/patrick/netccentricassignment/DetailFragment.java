@@ -45,7 +45,7 @@ public class DetailFragment extends Fragment
 
         //Get initial data to display blog post details
         BlogPostAPI blogPostService = BlogPostAPI.retrofit.create(BlogPostAPI.class);
-        final Call<BlogPost> call = blogPostService.getSingleBlogPost(getActivity().getIntent().getStringExtra(BlogPostModel.INTENT_ID));
+        final Call<BlogPost> call = blogPostService.getSingleBlogPost(getActivity().getIntent().getStringExtra(BlogPost.INTENT_ID));
 
         FetchBlogDetailTask blogPostTask = new FetchBlogDetailTask(getActivity(), rootView);
         blogPostTask.execute(call);
@@ -95,9 +95,9 @@ public class DetailFragment extends Fragment
             // The detail Activity called via intent.  Inspect the intent for forecast data.
             Intent intent = getActivity().getIntent();
 
-            if (intent != null && intent.hasExtra(BlogPostModel.INTENT_ID))
+            if (intent != null && intent.hasExtra(BlogPost.INTENT_ID))
             {
-                String id = intent.getStringExtra(BlogPostModel.INTENT_ID);
+                String id = intent.getStringExtra(BlogPost.INTENT_ID);
 
                 //display image of the blog post
                 ImageView thumbnailImageView = ((ImageView) mRootView.findViewById(R.id.thumbnail));

@@ -16,12 +16,14 @@
         android:id="@+id/txt_new_post"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="#e0d8d8"
+        android:gravity="top|left" />
 
     <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:text="SEND"
+        android:text="@string/action_send_new_post"
         android:id="@+id/btn_new_post"
         android:layout_marginTop="33dp"
         android:layout_below="@+id/txt_new_post"

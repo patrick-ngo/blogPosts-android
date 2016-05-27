@@ -24,6 +24,7 @@ import retrofit2.Response;
  */
 public class NewPostFragment extends Fragment
 {
+    private final String LOG_TAG = NewPostFragment.class.getSimpleName();
 
     public NewPostFragment()
     {
@@ -46,7 +47,7 @@ public class NewPostFragment extends Fragment
                 //get the EditText
                 EditText newPostText = (EditText)rootView.findViewById(R.id.txt_new_post);
 
-                //create new Result model
+                //create new Result model to send
                 Result newPost = new Result();
                 newPost.setCaption( newPostText.getText().toString());
 
@@ -59,7 +60,7 @@ public class NewPostFragment extends Fragment
                     @Override
                     public void onResponse(Call<Result> call, Response<Result> response)
                     {
-                        Log.w("RESPONSE: ",new Gson().toJson(response));
+                        Log.v(LOG_TAG, new Gson().toJson(response));
 
                         //Fire an Intent to launch the Main Activity
                         Intent mainIntent = new Intent(getActivity(), MainActivity.class);
@@ -69,7 +70,7 @@ public class NewPostFragment extends Fragment
                     @Override
                     public void onFailure(Call<Result> call, Throwable t)
                     {
-
+                        Log.e(LOG_TAG, t.getMessage());
                     }
                 });
 

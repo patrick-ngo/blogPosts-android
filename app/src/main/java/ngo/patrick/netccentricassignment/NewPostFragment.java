@@ -47,7 +47,7 @@ public class NewPostFragment extends Fragment
                 //get the EditText
                 EditText newPostText = (EditText)rootView.findViewById(R.id.txt_new_post);
 
-                //create new Result model to send
+                //create new Result model to send with caption parameter
                 Result newPost = new Result();
                 newPost.setCaption( newPostText.getText().toString());
 

@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
- * Created by Patrick on 5/26/2016.
+ * Blog Post API: contains all http calls needed, using Retrofit 2.0 API
  */
 public interface BlogPostAPI
 {

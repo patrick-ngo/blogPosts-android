@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 
 import ngo.patrick.netccentricassignment.http.BlogPostAPI;
 import ngo.patrick.netccentricassignment.model.BlogPost;
-import ngo.patrick.netccentricassignment.model.BlogPostList;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -95,25 +90,37 @@ public class DetailFragment extends Fragment
             // The detail Activity called via intent.  Inspect the intent for forecast data.
             Intent intent = getActivity().getIntent();
 
-            if (intent != null && intent.hasExtra(BlogPost.INTENT_ID))
+            if (intent != null && intent.hasExtra(BlogPost.INTENT_ID) && result != null)
             {
                 String id = intent.getStringExtra(BlogPost.INTENT_ID);
 
                 //display image of the blog post
                 ImageView thumbnailImageView = ((ImageView) mRootView.findViewById(R.id.thumbnail));
-                Picasso.with(getContext()).load(result.getImage()).into(thumbnailImageView);
+                if (thumbnailImageView != null)
+                {
+                    Picasso.with(getContext()).load(result.getImage()).into(thumbnailImageView);
+                }
 
                 //display caption of the blog post
                 TextView captionTextView =  ((TextView) mRootView.findViewById(R.id.caption));
-                captionTextView.setText(result.getCaption());
+                if (captionTextView != null)
+                {
+                    captionTextView.setText(result.getCaption());
+                }
 
                 //display creation date of the blog post
                 TextView createdOnTextView =  ((TextView) mRootView.findViewById(R.id.createdOn));
-                createdOnTextView.setText(getContext().getResources().getString(R.string.created_on) + " " + result.getCreatedAt());
+                if (createdOnTextView != null)
+                {
+                    createdOnTextView.setText(getContext().getResources().getString(R.string.created_on) + " " + result.getCreatedAt());
+                }
 
                 //display update date of the blog post
                 TextView updatedOnTextView = ((TextView) mRootView.findViewById(R.id.updatedOn));
-                updatedOnTextView.setText(getContext().getResources().getString(R.string.updated_on) + " " + result.getUpdatedAt());
+                if (updatedOnTextView != null)
+                {
+                    updatedOnTextView.setText(getContext().getResources().getString(R.string.updated_on) + " " + result.getUpdatedAt());
+                }
             }
         }
 
